@@ -11,27 +11,48 @@ afterEach(() => {
 
 describe("Github page tests", () => {
   test("The h1 header content'", async () => {
+    await page.goto("https://github.com/team", { timeout: 1500 });
     const firstLink = await page.$("header div div a");
     await firstLink.click();
     await page.waitForSelector("h1");
     const title2 = await page.title();
-    jest.setTimeout(500);
     expect(title2).toEqual("GitHub: Where the world builds software · GitHub");
   });
 
   test("The first link attribute", async () => {
     const actual = await page.$eval("a", (link) => link.getAttribute("href"));
-    jest.setTimeout(500);
     expect(actual).toEqual("#start-of-content");
   });
 
   test("The page contains Sign in button", async () => {
+    await page.goto("https://github.com/team", { timeout: 1000 });
     const btnSelector = ".btn-large-mktg.btn-mktg";
     await page.waitForSelector(btnSelector, {
       visible: true,
     });
     const actual = await page.$eval(btnSelector, (link) => link.textContent);
-    jest.setTimeout(500);
+    await page.goto("https://github.com/team", { timeout: 1300 });
     expect(actual).toContain("Sign up for free");
   });
+});
+
+test("The h1 header content on page actions", async () => {
+  await page.goto("https://github.com/features/actions", { timeout: 1400 });
+  await page.waitForSelector("h1");
+  const title = await page.title();
+  expect(title).toEqual("Features • GitHub Actions · GitHub");
+});
+
+test("The h1 header content on page enterprise", async () => {
+  await page.goto("https://github.com/enterprise", { timeout: 1800 });
+  await page.waitForSelector("h1");
+  const title = await page.title();
+  expect(title).toEqual("The AI Powered Developer Platform. · GitHub");
+});
+
+test("The h1 header content on page sponsors", async () => {
+  await page.goto("https://github.com/sponsors", { timeout: 900 });
+  await page.waitForSelector("h1");
+  const title = await page.title();
+  expect(title).toEqual("GitHub Sponsors · GitHub");
 });
